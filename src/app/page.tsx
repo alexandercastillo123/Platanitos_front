@@ -1,4 +1,7 @@
+'use client'
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   return (
@@ -58,6 +61,9 @@ export default function Home() {
           >
             Documentation
           </a>
+          <Button onClick={() => redirect('iniciar-sesion')}>
+            Inicia sesion
+          </Button>
         </div>
       </main>
     </div>
