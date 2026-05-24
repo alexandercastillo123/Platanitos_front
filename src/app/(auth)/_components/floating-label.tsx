@@ -4,19 +4,20 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { InputGroup, InputGroupButton, InputGroupInput} from '@/components/ui/input-group'
-import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxTrigger, ComboboxValue } from '@/components/ui/combobox'
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger, ComboboxValue } from '@/components/ui/combobox'
 import paisesData from '../_data/paises.json'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import peru from '@/assets/banderaperu.jpg'
 
 interface props {
-    type: string,
+    type: string
     id: string
     label: string
     register?: UseFormRegisterReturn
+    focus?: boolean
 }
-export default function FloatingLabel({ type, id, label, register } : props) {
+export default function FloatingLabel({ type, id, label, register, focus = false} : props) {
     const [showPassword, setShowPassword] = useState(false)
     const isPassword = type === 'password'
     const inputType = isPassword && showPassword ? 'text' : type
@@ -44,7 +45,8 @@ export default function FloatingLabel({ type, id, label, register } : props) {
                         </Button>
                     }/>
                     <ComboboxContent side='bottom' sideOffset={0} align='start' className={'min-w-32! shadow-none absolute'}>
-                        <ComboboxEmpty>No items found.</ComboboxEmpty>
+                        <ComboboxEmpty>No se encontraron resultados.</ComboboxEmpty>
+                        <ComboboxInput showTrigger={false} className={'hidden'}></ComboboxInput>
                         <ComboboxList>
                             {(item) => (
                             <ComboboxItem key={item.value} value={item} className={'cursor-pointer'}>
@@ -58,15 +60,16 @@ export default function FloatingLabel({ type, id, label, register } : props) {
                     </ComboboxContent>
                 </Combobox>
             )}
-            <InputGroup className={`h-auto ${type === 'tel' ? "rounded-l-none ": ''}`}>
+            <InputGroup className={`h-auto ${type === 'tel' ? "rounded-l-none ": ''} focus-within:ring-0! focus-within:ring-offset-0! focus-within:border-[#55b849]!`}>
                 <InputGroupInput
                     placeholder=' hola'
                     type={inputType}
                     {...restRegister}
                     id={id}
                     maxLength={inputType === 'tel' ? 9 : 255}
-                    className='peer placeholder-transparent! h-14! pt-4'
+                    className='peer placeholder-transparent! h-14! pt-4 transition-all'
                     onChange={e => handleTelInput(e)}
+                    autoFocus={focus}
                 />
                 <FieldLabel 
                     className='absolute transition-all top-3.5 left-2.5 -translate-y-1/2 text-gray-600 text-xs
