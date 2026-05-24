@@ -1,0 +1,14 @@
+{
+    "items": [
+        {
+            "id": "1",
+            "name": "Zapatilla Caballero Z Elvis",
+            "brand": "Just4u",
+            "color": "Negro",
+            "size": "41",
+            "price": 109.90,
+            "quantity": 1,
+            "image": "/img/zapatilla.png"
+        }
+    ]
+}
