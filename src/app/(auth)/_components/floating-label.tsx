@@ -4,11 +4,8 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { InputGroup, InputGroupButton, InputGroupInput} from '@/components/ui/input-group'
-import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger, ComboboxValue } from '@/components/ui/combobox'
-import paisesData from '../_data/paises.json'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import peru from '@/assets/banderaperu.jpg'
+import SelectPrefijos from '../_components/select-prefijos'
+
 
 interface props {
     type: string
@@ -16,8 +13,9 @@ interface props {
     label: string
     register?: UseFormRegisterReturn
     focus?: boolean
+    onPrefixChange?: (prefix: string) => void
 }
-export default function FloatingLabel({ type, id, label, register, focus = false} : props) {
+export default function FloatingLabel({ type, id, label, register, focus = false, onPrefixChange} : props) {
     const [showPassword, setShowPassword] = useState(false)
     const isPassword = type === 'password'
     const inputType = isPassword && showPassword ? 'text' : type
@@ -25,40 +23,17 @@ export default function FloatingLabel({ type, id, label, register, focus = false
 
     const handleTelInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(inputType === 'tel'){
-            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0,9)
+            const numero = e.target.value.replace(/[^0-9]/g, '').slice(0,9)
+            e.target.value = numero
+            onChange?.(e)
+            return
         }
         onChange?.(e)
     }
     return (
         <Field className='relative flex flex-row gap-0'>
             {type==='tel' && (
-                <Combobox items={paisesData} defaultValue={paisesData[0]}>
-                    <ComboboxTrigger render={
-                        <Button variant={'outline'} className="w-32! h-14.5 font-normal rounded-r-none p-4 cursor-pointer">
-                            <Image
-                                src={peru}
-                                alt={'peru'}
-                                width={16}
-                                height={24}
-                            />
-                            <ComboboxValue/>
-                        </Button>
-                    }/>
-                    <ComboboxContent side='bottom' sideOffset={0} align='start' className={'min-w-32! shadow-none absolute'}>
-                        <ComboboxEmpty>No se encontraron resultados.</ComboboxEmpty>
-                        <ComboboxInput showTrigger={false} className={'hidden'}></ComboboxInput>
-                        <ComboboxList>
-                            {(item) => (
-                            <ComboboxItem key={item.value} value={item} className={'cursor-pointer'}>
-                                <Image src={peru} alt={item.label}
-                                    width={16}
-                                    height={24}
-                                />{item.label}
-                            </ComboboxItem>
-                            )}
-                        </ComboboxList>
-                    </ComboboxContent>
-                </Combobox>
+                <SelectPrefijos onPrefixChange={onPrefixChange} />
             )}
             <InputGroup className={`h-auto ${type === 'tel' ? "rounded-l-none ": ''} focus-within:ring-0! focus-within:ring-offset-0! focus-within:border-[#55b849]!`}>
                 <InputGroupInput

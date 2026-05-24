@@ -8,7 +8,8 @@ export const loginFormSchema = z.union([
     }),
     z.object({
         type: z.literal('tel'),
-        tel: z.string().min(10).regex(/^[0-9]+$/, "Solo se permiten números"),
+        telPrefix: z.string().min(1),
+        tel: z.string().min(9).regex(/^[0-9]+$/, "Solo se permiten números"),
         password: z.string()
     })
 ])

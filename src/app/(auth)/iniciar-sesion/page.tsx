@@ -7,56 +7,47 @@ import { Button } from '@/components/ui/button'
 import {useForm} from 'react-hook-form'
 import { loginFormSchema, type LoginRequest } from '@/utils/validation';
 import {zodResolver} from '@hookform/resolvers/zod'
-import userData from '../_data/usuario.json'
 import { useEffect, useState } from 'react';
+import {useLogin} from "../_hooks/useLogin"
 import Link from 'next/link';
 
 
 export default function Page() {
+    const {handlePass, pass, resetPass} = useLogin()
     const [tab, setTab] = useState<'email' | 'tel'>('email')
-    const [pass, setPass] = useState(false)
-    const {register, handleSubmit, getValues, resetField, setFocus} = useForm<LoginRequest>({
+    const {register, handleSubmit, getValues, resetField, setFocus, setValue} = useForm<LoginRequest>({
         defaultValues: {
-            type: tab,
+            type: 'email',
             email: '',
             password: ''
         },
         resolver: zodResolver(loginFormSchema),
         mode: "onSubmit"
     })
-    const handleTab = () => {
-        if(tab === 'email'){
-            setTab('tel')
-        } 
-        if(tab === 'tel'){
-            setTab('email')
-        }
-        setPass(false);
+    const handleTab = (siguienteTab: string) => {
+        const targetTab = siguienteTab as 'email' | 'tel'
+        setTab(targetTab)
+        setValue('type', targetTab)
+        resetPass()
         resetField('email')
         resetField('tel')
+        resetField('telPrefix')
         resetField('password')
-    }
-
-    const handlePass = () => {
-        const verify = getValues(tab)
-        const isExits = userData.find(user => user.email === verify || user.tel === verify)
-        if(isExits){
-            setPass(true)
-        }
-        else setPass(false)
-        console.log(verify)
     }
                 
     useEffect(() => {
-        if(pass) setFocus('password')
-        else setFocus(tab)
+        const timeout = setTimeout(() => {
+            if(pass) setFocus('password')
+            else setFocus(tab)
+        }, 100)
+        return () =>clearTimeout(timeout)
     }, [pass, tab, setFocus])
 
 
     return (
-        <main className='flex min-h-auto w-full justify-center p-6 md:p-10"'>
-            <Card className='w-full max-w-lg p-2 mx-auto gap-2 md:py-7.5 md:px-19.5'>
-                <CardHeader className='p-2'>
+        <main className='flex min-h-auto w-full p-3 md:p-10 justify-center'>
+            <Card className='w-full max-w-lg p-2 mx-auto gap-2 md:py-7.5 md:px-19.5 ring-0'>
+                <CardHeader className='p-1'>
                     <CardTitle className='text-center mb-4 text-xl'>
                         Iniciar Sesión
                     </CardTitle>
@@ -67,14 +58,17 @@ export default function Page() {
                         </TabsList>
                     </Tabs>
                 </CardHeader>
-                <CardContent className='p-2 overflow-hidden'>
-                    <form action="POST">
+                <CardContent className='p-1 overflow-hidden'>
+                    <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
+                        <input type='hidden' {...register('type')} />
+                        <input type='hidden' {...register('telPrefix')} />
                         <FieldGroup className='gap-3'>
                             <FloatingLabel
                                 type={tab}
                                 id={tab}
                                 label={tab === 'email' ? 'Correo electrónico' : 'Teléfono'}
                                 register={register(tab)}
+                                onPrefixChange={(prefix) => setValue('telPrefix', prefix)}
                                 focus={!pass}
                             />
                             {pass && (
@@ -107,7 +101,7 @@ export default function Page() {
                                     <Button
                                         type='button'
                                         className='bg-[#0c550f] hover:bg-[#7ec976] cursor-pointer h-11 my-1 px-3 py-2'
-                                        onClick={handlePass}
+                                        onClick={() => handlePass(getValues(tab))}
                                     >
                                         CONTINUAR
                                     </Button>
@@ -127,7 +121,7 @@ export default function Page() {
                                 <Button
                                     type='button'
                                     className='border-[#0C550F] text-[#0C550F] bg-white cursor-pointer h-9 px-3 py-2 hover:bg-white! hover:text-[#0C550F]! font-normal tracking-widest rounded-md'
-                                    onClick={handlePass}
+                                    onClick={() => handlePass(getValues(tab))}
                                     asChild
                                 >
                                     <Link
