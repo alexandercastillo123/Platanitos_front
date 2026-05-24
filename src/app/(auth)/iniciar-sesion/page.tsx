@@ -12,21 +12,32 @@ import { useState } from 'react';
 
 
 export default function Page() {
+    const [tab, setTab] = useState<'email' | 'tel'>('email')
     const [pass, setPass] = useState(false)
-    const {register, handleSubmit, getValues} = useForm<LoginRequest>({
+    const {register, handleSubmit, getValues, resetField} = useForm<LoginRequest>({
         defaultValues: {
+            type: tab,
             email: '',
             password: ''
         },
         resolver: zodResolver(loginFormSchema),
         mode: "onSubmit"
     })
+    const handleTab = () => {
+        if(tab === 'email') setTab('tel')
+        if(tab === 'tel') setTab('email')
+        setPass(false);
+        resetField('email')
+        resetField('tel')
+        resetField('password')
+    }
 
-    const handleEmail = () => {
-        const email = getValues('email')
-        const isExits = userData.find(user => user.email === email)
+    const handlePass = () => {
+        const verify = getValues(tab)
+        const isExits = userData.find(user => user.email === verify || user.tel === verify)
         if(isExits) setPass(true)
         else setPass(false)
+        console.log(verify)
     }
 
 
@@ -37,10 +48,10 @@ export default function Page() {
                     <CardTitle className='text-center mb-4 text-xl'>
                         Iniciar Sesión
                     </CardTitle>
-                    <Tabs className='w-full' >
+                    <Tabs className='w-full' value={tab} onValueChange={handleTab} >
                         <TabsList className='w-full h-14! p-2'>
                             <TabsTrigger value='email' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Correo electrónico</TabsTrigger>
-                            <TabsTrigger value='telefono' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Teléfono</TabsTrigger>
+                            <TabsTrigger value='tel' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Teléfono</TabsTrigger>
                         </TabsList>
                     </Tabs>
                 </CardHeader>
@@ -48,10 +59,10 @@ export default function Page() {
                     <form action="POST">
                         <FieldGroup>
                             <FloatingLabel
-                                type='email'
-                                id='email'
-                                label='Correo electrónico'
-                                register={register('email')}
+                                type={tab}
+                                id={tab}
+                                label={tab === 'email' ? 'Correo electrónico' : 'Teléfono'}
+                                register={register(tab)}
                             />
                             {pass && (
                                 <FloatingLabel
@@ -65,7 +76,7 @@ export default function Page() {
                                 <Button
                                     type='button'
                                     className='bg-[#0c550f] hover:bg-[#7ec976] cursor-pointer h-10 my-1 px-3 py-2'
-                                    onClick={handleEmail}
+                                    onClick={handlePass}
                                 >
                                     CONTINUAR
                                 </Button>
