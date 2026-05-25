@@ -1,48 +1,67 @@
 "use client";
-import { Card,CardHeader, CardContent, CardTitle } from '@/components/ui/card'
-import { Field, FieldGroup, FieldLabel} from '@/components/ui/field'
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import FloatingLabel from '../_components/floating-label'
+import FloatingLabelInput from '../_components/floating-label-input'
+import FloatingLabelPassword from '../_components/floating-label-password'
+import FloatingLabelPhone from '../_components/floating-label-phone'
 import { Button } from '@/components/ui/button'
-import {useForm} from 'react-hook-form'
+import { useForm, useWatch, FieldError } from 'react-hook-form'
 import { loginFormSchema, type LoginRequest } from '@/utils/validation';
-import {zodResolver} from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react';
-import {useLogin} from "../_hooks/useLogin"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState, useEffect } from 'react';
+import { useLogin } from "../_hooks/useLogin"
 import Link from 'next/link';
 
-
 export default function Page() {
-    const {handlePass, pass, resetPass} = useLogin()
+    const { userFound, reset: resetLoginState, checkUserExists } = useLogin()
     const [tab, setTab] = useState<'email' | 'tel'>('email')
-    const {register, handleSubmit, getValues, resetField, setFocus, setValue} = useForm<LoginRequest>({
+    
+    const { register, handleSubmit, getValues, reset: resetForm, setValue, setFocus, control, formState: { errors } } = useForm<LoginRequest>({
         defaultValues: {
             type: 'email',
             email: '',
             password: ''
         },
         resolver: zodResolver(loginFormSchema),
-        mode: "onSubmit"
+        mode: "onChange"
     })
+
+    const emailError = (errors as { email?: FieldError }).email;
+    const telError = (errors as { tel?: FieldError }).tel;
+    const activeValue = useWatch({ control, name: tab });
+    const isContinueDisabled = !!(tab === 'email' ? emailError : telError) || !activeValue;
+
     const handleTab = (siguienteTab: string) => {
         const targetTab = siguienteTab as 'email' | 'tel'
         setTab(targetTab)
-        setValue('type', targetTab)
-        resetPass()
-        resetField('email')
-        resetField('tel')
-        resetField('telPrefix')
-        resetField('password')
+        resetLoginState()
+        resetForm({
+            type: targetTab,
+            email: '',
+            tel: '',
+            telPrefix: '',
+            password: ''
+        })
     }
-                
+
     useEffect(() => {
         const timeout = setTimeout(() => {
-            if(pass) setFocus('password')
-            else setFocus(tab)
+            if (userFound) {
+                setFocus('password')
+            } else {
+                setFocus(tab)
+            }
         }, 100)
-        return () =>clearTimeout(timeout)
-    }, [pass, tab, setFocus])
+        return () => clearTimeout(timeout)
+    }, [userFound, tab, setFocus])
 
+    const handleContinue = () => {
+        const valor = getValues(tab)
+        if (valor) {
+            checkUserExists(valor)
+        }
+    }
 
     return (
         <main className='flex min-h-auto w-full p-3 md:p-10 justify-center'>
@@ -51,7 +70,7 @@ export default function Page() {
                     <CardTitle className='text-center mb-4 text-xl'>
                         Iniciar Sesión
                     </CardTitle>
-                    <Tabs className='w-full' value={tab} onValueChange={handleTab} >
+                    <Tabs className='w-full' value={tab} onValueChange={handleTab}>
                         <TabsList className='w-full h-14! p-2'>
                             <TabsTrigger value='email' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Correo electrónico</TabsTrigger>
                             <TabsTrigger value='tel' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Teléfono</TabsTrigger>
@@ -63,22 +82,59 @@ export default function Page() {
                         <input type='hidden' {...register('type')} />
                         <input type='hidden' {...register('telPrefix')} />
                         <FieldGroup className='gap-3'>
-                            <FloatingLabel
-                                type={tab}
-                                id={tab}
-                                label={tab === 'email' ? 'Correo electrónico' : 'Teléfono'}
-                                register={register(tab)}
-                                onPrefixChange={(prefix) => setValue('telPrefix', prefix)}
-                                focus={!pass}
-                            />
-                            {pass && (
-                                <>
-                                    <FloatingLabel
-                                        type='password'
-                                        id='password'
-                                        label='Contraseña'
-                                        register={register('password')}
+                            {tab === 'email' ? (
+                                <div className="flex flex-col gap-1 w-full">
+                                    <FloatingLabelInput
+                                        key="email"
+                                        type="email"
+                                        id="email"
+                                        label="Correo electrónico"
+                                        register={register('email')}
+                                        focus={!userFound}
+                                        hasError={!!emailError}
                                     />
+                                    {emailError && (
+                                        <FieldLabel htmlFor="email" className="text-red-500 text-xs mt-1">
+                                            {emailError.message}
+                                        </FieldLabel>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-1 w-full">
+                                    <FloatingLabelPhone
+                                        key="tel"
+                                        id="tel"
+                                        label="Teléfono"
+                                        register={register('tel')}
+                                        onPrefixChange={(prefix) => setValue('telPrefix', prefix)}
+                                        focus={!userFound}
+                                        hasError={!!telError}
+                                    />
+                                    {telError && (
+                                        <FieldLabel htmlFor="tel" className="text-red-500 text-xs mt-1">
+                                            {telError.message}
+                                        </FieldLabel>
+                                    )}
+                                </div>
+                            )}
+                            
+                            {userFound && (
+                                <>
+                                    <div className="flex flex-col gap-1 w-full">
+                                        <FloatingLabelPassword
+                                            key="password"
+                                            id="password"
+                                            label="Contraseña"
+                                            register={register('password')}
+                                            focus={userFound}
+                                            hasError={!!errors.password}
+                                        />
+                                        {errors.password && (
+                                            <FieldLabel htmlFor="password" className="text-red-500 text-xs mt-1">
+                                                {errors.password.message}
+                                            </FieldLabel>
+                                        )}
+                                    </div>
                                     <Field>
                                         <Link
                                             href={'/restablecer-contrasena'}
@@ -96,12 +152,13 @@ export default function Page() {
                                     </Field>
                                 </>
                             )}
-                            { !pass && (
+                            {!userFound && (
                                 <Field>
                                     <Button
                                         type='button'
                                         className='bg-[#0c550f] hover:bg-[#7ec976] cursor-pointer h-11 my-1 px-3 py-2'
-                                        onClick={() => handlePass(getValues(tab))}
+                                        onClick={handleContinue}
+                                        disabled={isContinueDisabled}
                                     >
                                         CONTINUAR
                                     </Button>
@@ -121,18 +178,14 @@ export default function Page() {
                                 <Button
                                     type='button'
                                     className='border-[#0C550F] text-[#0C550F] bg-white cursor-pointer h-9 px-3 py-2 hover:bg-white! hover:text-[#0C550F]! font-normal tracking-widest rounded-md'
-                                    onClick={() => handlePass(getValues(tab))}
                                     asChild
                                 >
-                                    <Link
-                                        href={'/registrarse'}
-                                    >
+                                    <Link href={'/registrarse'}>
                                         CREA TU CUENTA
                                     </Link>
                                 </Button>
                             </Field>
                         </FieldGroup>
-                        
                     </form>
                 </CardContent>
             </Card>
