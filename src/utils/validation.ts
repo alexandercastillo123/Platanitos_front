@@ -17,4 +17,17 @@ export const loginFormSchema = z.discriminatedUnion('type', [
     })
 ])
 
+export const resetFormSchema = z.discriminatedUnion('type', [
+    z.object({
+        type: z.literal('email'),
+        email: z.string().email("Correo electrónico inválido")
+    }),
+    z.object({
+        type: z.literal('tel'),
+        telPrefix: z.string().min(1),
+        tel: z.string().length(9, "Debe tener 9 digitos").regex(/^[0-9]+$/, "Solo se permiten números")
+    })
+])
+
 export type LoginRequest = z.infer<typeof loginFormSchema>
+export type ResetRequest = z.infer<typeof resetFormSchema>
