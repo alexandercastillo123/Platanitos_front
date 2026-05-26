@@ -1,3 +1,8 @@
+'use client'
+
+import { Navbar } from "@/components/shared/navbar"
+import { Footer } from "@/components/shared/footer"
+
 export default function DashboardLayout({
     children,
 }: {
@@ -5,15 +10,11 @@ export default function DashboardLayout({
 }) {
     return (
         <div>
-            <header>
-
-            </header>
-            <main>
-                
+            <Navbar/>
+            <main className=" p-5 mx-75">
+                {children}
             </main>
-            <footer>
-
-            </footer>
+            <Footer />
         </div>
     )
 }
