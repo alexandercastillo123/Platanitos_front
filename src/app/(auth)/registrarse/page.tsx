@@ -3,44 +3,44 @@
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import FloatingLabelInput from '../_components/floating-label-input'
-import FloatingLabelPhone from '../_components/floating-label-phone'
 import { Button } from '@/components/ui/button'
 import { useForm, useWatch, FieldError } from 'react-hook-form'
 import { registerFormSchema, type RegisterRequest } from '@/utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import CustomInput from '../_components/custom-input';
 
 export default function Page() {
     const [tab, setTab] = useState<'email' | 'tel'>('email')
     
-    const { register, handleSubmit, reset: resetForm, setValue, setFocus, control, formState: { errors } } = useForm<RegisterRequest>({
+    const { register, handleSubmit, setValue, setFocus, control, formState: { errors } } = useForm<RegisterRequest>({
         defaultValues: {
             type: 'email',
             email: ''
         },
         resolver: zodResolver(registerFormSchema),
-        mode: "all"
+        mode: "onChange"
     })
 
     const emailError = (errors as { email?: FieldError }).email;
     const telError = (errors as { tel?: FieldError }).tel;
-    const activeValue = useWatch({ control, name: tab });
-    const isResetDisabled = !!(tab === 'email' ? emailError : telError) || !activeValue;
+    const [email, tel, dni, nombres, apellidos] = useWatch({control,
+        name: ['email', 'tel', 'dni', 'nombres', 'apellidos']
+    })
+    const tipoValido = tab === 'email' ? (!emailError && email) : (!telError && tel)
+    const camposComunes = 
+        dni?.length === 8 && !errors.dni &&
+        nombres?.length > 0 && !errors.nombres &&
+        apellidos?.length > 0 && !errors.apellidos
+    const isRegisterDisabled = !tipoValido || !camposComunes
 
     const handleTab = (siguienteTab: string) => {
         const targetTab = siguienteTab as 'email' | 'tel'
         setTab(targetTab)
-        resetForm({
-            type: targetTab,
-            email: '',
-            tel: '',
-            telPrefix: '',
-            dni: '',
-            nombres: '',
-            apellidos: ''
-        })
+        setValue('type', targetTab, {shouldValidate: true})
+        if(targetTab === 'email') setValue('tel', '')
+        if(targetTab === 'tel') setValue('email', '')
     }
 
     useEffect(() => {
@@ -67,90 +67,60 @@ export default function Page() {
                 <CardContent className='p-1 overflow-hidden'>
                     <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
                         <input type='hidden' {...register('type')} />
-                        <input type='hidden' {...register('telPrefix')} />
                         <FieldGroup className='gap-3'>
                             {tab === 'email' ? (
-                                <div className="flex flex-col gap-1 w-full">
-                                    <FloatingLabelInput
-                                        key="email"
-                                        type="email"
-                                        id="email"
-                                        label="Correo electrónico"
-                                        register={register('email')}
-                                        hasError={!!emailError}
-                                    />
-                                    {emailError && (
-                                        <FieldLabel htmlFor="email" className="text-red-500 text-xs mt-1">
-                                            {emailError.message}
-                                        </FieldLabel>
-                                    )}
-                                </div>
+                                <CustomInput
+                                    type={'email'}
+                                    id={'email'}
+                                    label={'Correo electrónico'}
+                                    register={register('email')}
+                                    innerRef={register('email').ref}
+                                    hasError={!!emailError}
+                                    errorMessage={emailError?.message}
+                                />
                             ) : (
-                                <div className="flex flex-col gap-1 w-full">
-                                    <FloatingLabelPhone
-                                        key="tel"
-                                        id="tel"
-                                        label="Teléfono"
-                                        register={register('tel')}
-                                        onPrefixChange={(prefix) => setValue('telPrefix', prefix)}
-                                        hasError={!!telError}
-                                    />
-                                    {telError && (
-                                        <FieldLabel htmlFor="tel" className="text-red-500 text-xs mt-1">
-                                            {telError.message}
-                                        </FieldLabel>
-                                    )}
-                                </div>
+                                <CustomInput
+                                    type={'tel'}
+                                    id={'tel'}
+                                    label={'Teléfono'}
+                                    register={register('tel')}
+                                    innerRef={register('tel').ref}
+                                    hasError={!!telError}
+                                    errorMessage={telError?.message}
+                                />
                             )}
-                            <div className="flex flex-col gap-1 w-full">
-                                <FloatingLabelInput
-                                    key="dni"
-                                    type="text"
-                                    id="dni"
-                                    label="DNI"
-                                    register={register('dni')}
-                                    hasError={!!errors.dni}
-                                />
-                                {errors.dni && (
-                                    <FieldLabel htmlFor="dni" className="text-red-500 text-xs mt-1">
-                                        {errors.dni?.message}
-                                    </FieldLabel>
-                                )}
-                            </div>
-                            <div className="flex flex-col gap-1 w-full">
-                                <FloatingLabelInput
-                                    key="nombres"
-                                    type="text"
-                                    id="nombres"
-                                    label="Nombres"
-                                    register={register('nombres')}
-                                    hasError={!!errors.nombres}
-                                />
-                                {errors.nombres && (
-                                    <FieldLabel htmlFor="nombres" className="text-red-500 text-xs mt-1">
-                                        {errors.nombres?.message}
-                                    </FieldLabel>
-                                )}
-                            </div>
-                            <div className="flex flex-col gap-1 w-full">
-                                <FloatingLabelInput
-                                    key="apellidos"
-                                    type="text"
-                                    id="apellidos"
-                                    label="Apellidos"
-                                    register={register('apellidos')}
-                                    hasError={!!errors.apellidos}
-                                />
-                                {errors.apellidos && (
-                                    <FieldLabel htmlFor="apellidos" className="text-red-500 text-xs mt-1">
-                                        {errors.apellidos?.message}
-                                    </FieldLabel>
-                                )}
-                            </div>
+                            <CustomInput
+                                type={'text'}
+                                id={'dni'}
+                                label={'DNI'}
+                                register={register('dni')}
+                                innerRef={register('dni').ref}
+                                maxLength={8}
+                                hasError={!!errors.dni}
+                                errorMessage={errors.dni?.message}
+                            />
+                            <CustomInput
+                                type={'text'}
+                                id={'nombres'}
+                                label={'Nombres'}
+                                register={register('nombres')}
+                                innerRef={register('nombres').ref}
+                                hasError={!!errors.nombres}
+                                errorMessage={errors.nombres?.message}
+                            />
+                            <CustomInput
+                                type={'text'}
+                                id={'apellidos'}
+                                label={'Apellidos'}
+                                register={register('apellidos')}
+                                innerRef={register('apellidos').ref}
+                                hasError={!!errors.apellidos}
+                                errorMessage={errors.apellidos?.message}
+                            />
                             <Field>
                                 <Button
                                     className='bg-[#0c550f] hover:bg-[#7ec976] cursor-pointer h-11 my-1 px-3 py-2 tracking-widest'
-                                    disabled={isResetDisabled}
+                                    disabled={isRegisterDisabled}
                                 >
                                     CREA TU CUENTA
                                 </Button>

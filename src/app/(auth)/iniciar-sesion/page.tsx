@@ -2,9 +2,6 @@
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import FloatingLabelInput from '../_components/floating-label-input'
-import FloatingLabelPassword from '../_components/floating-label-password'
-import FloatingLabelPhone from '../_components/floating-label-phone'
 import { Button } from '@/components/ui/button'
 import { useForm, useWatch, FieldError } from 'react-hook-form'
 import { loginFormSchema, type LoginRequest } from '@/utils/validation';
@@ -12,12 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useEffect } from 'react';
 import { useLogin } from "../_hooks/useLogin"
 import Link from 'next/link';
+import CustomInput from '../_components/custom-input'
+
 
 export default function Page() {
     const { userFound, reset: resetLoginState, checkUserExists } = useLogin()
     const [tab, setTab] = useState<'email' | 'tel'>('email')
     
-    const { register, handleSubmit, getValues, reset: resetForm, setValue, setFocus, control, formState: { errors } } = useForm<LoginRequest>({
+    const { register, handleSubmit, getValues, reset: resetForm, setFocus, control, formState: { errors } } = useForm<LoginRequest>({
         defaultValues: {
             type: 'email',
             email: '',
@@ -29,6 +28,9 @@ export default function Page() {
 
     const emailError = (errors as { email?: FieldError }).email;
     const telError = (errors as { tel?: FieldError }).tel;
+    const passwordError = (errors as { password?: FieldError}).password;
+
+
     const activeValue = useWatch({ control, name: tab });
     const isContinueDisabled = !!(tab === 'email' ? emailError : telError) || !activeValue;
 
@@ -40,7 +42,6 @@ export default function Page() {
             type: targetTab,
             email: '',
             tel: '',
-            telPrefix: '',
             password: ''
         })
     }
@@ -80,60 +81,47 @@ export default function Page() {
                 <CardContent className='p-1 overflow-hidden'>
                     <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
                         <input type='hidden' {...register('type')} />
-                        <input type='hidden' {...register('telPrefix')} />
                         <FieldGroup className='gap-3'>
                             {tab === 'email' ? (
                                 <div className="flex flex-col gap-1 w-full">
-                                    <FloatingLabelInput
-                                        key="email"
-                                        type="email"
-                                        id="email"
-                                        label="Correo electrónico"
+                                    <CustomInput
+                                        type={'email'}
+                                        id={'email'}
+                                        label={'Correo electrónico'}
                                         register={register('email')}
+                                        innerRef={register('email').ref}
                                         focus={!userFound}
                                         hasError={!!emailError}
+                                        errorMessage={emailError?.message}
                                     />
-                                    {emailError && (
-                                        <FieldLabel htmlFor="email" className="text-red-500 text-xs mt-1">
-                                            {emailError.message}
-                                        </FieldLabel>
-                                    )}
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-1 w-full">
-                                    <FloatingLabelPhone
-                                        key="tel"
-                                        id="tel"
-                                        label="Teléfono"
+                                    <CustomInput
+                                        type={'tel'}
+                                        id={'tel'}
+                                        label={'Teléfono'}
                                         register={register('tel')}
-                                        onPrefixChange={(prefix) => setValue('telPrefix', prefix)}
+                                        innerRef={register('tel').ref}
                                         focus={!userFound}
                                         hasError={!!telError}
+                                        errorMessage={telError?.message}
                                     />
-                                    {telError && (
-                                        <FieldLabel htmlFor="tel" className="text-red-500 text-xs mt-1">
-                                            {telError.message}
-                                        </FieldLabel>
-                                    )}
                                 </div>
                             )}
-                            
                             {userFound && (
                                 <>
                                     <div className="flex flex-col gap-1 w-full">
-                                        <FloatingLabelPassword
-                                            key="password"
-                                            id="password"
-                                            label="Contraseña"
+                                        <CustomInput
+                                            type={'password'}
+                                            id={'password'}
+                                            label={'Contraseña'}
                                             register={register('password')}
+                                            innerRef={register('password').ref}
                                             focus={userFound}
-                                            hasError={!!errors.password}
+                                            hasError={!!passwordError}
+                                            errorMessage={passwordError?.message}
                                         />
-                                        {errors.password && (
-                                            <FieldLabel htmlFor="password" className="text-red-500 text-xs mt-1">
-                                                {errors.password.message}
-                                            </FieldLabel>
-                                        )}
                                     </div>
                                     <Field>
                                         <Link

@@ -2,19 +2,18 @@
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import FloatingLabelInput from '../_components/floating-label-input'
-import FloatingLabelPhone from '../_components/floating-label-phone'
 import { Button } from '@/components/ui/button'
 import { useForm, useWatch, FieldError } from 'react-hook-form'
 import { resetFormSchema, type ResetRequest } from '@/utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import CustomInput from '../_components/custom-input';
 
 export default function Page() {
     const [tab, setTab] = useState<'email' | 'tel'>('email')
     
-    const { register, handleSubmit, reset: resetForm, setValue, setFocus, control, formState: { errors } } = useForm<ResetRequest>({
+    const { register, handleSubmit, reset: resetForm, setFocus, control, formState: { errors } } = useForm<ResetRequest>({
         defaultValues: {
             type: 'email',
             email: ''
@@ -35,7 +34,6 @@ export default function Page() {
             type: targetTab,
             email: '',
             tel: '',
-            telPrefix: '',
         })
     }
 
@@ -63,43 +61,34 @@ export default function Page() {
                 <CardContent className='p-1 overflow-hidden'>
                     <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
                         <input type='hidden' {...register('type')} />
-                        <input type='hidden' {...register('telPrefix')} />
                         <FieldGroup className='gap-3'>
                             {tab === 'email' ? (
                                 <div className="flex flex-col gap-1 w-full">
-                                    <FloatingLabelInput
-                                        key="email"
-                                        type="email"
-                                        id="email"
-                                        label="Correo electrónico"
+                                    <CustomInput
+                                        type={'email'}
+                                        id={'email'}
+                                        label={'Correo electrónico'}
                                         register={register('email')}
+                                        innerRef={register('email').ref}
                                         hasError={!!emailError}
+                                        errorMessage={emailError?.message}
                                     />
-                                    {emailError && (
-                                        <FieldLabel htmlFor="email" className="text-red-500 text-xs mt-1">
-                                            {emailError.message}
-                                        </FieldLabel>
-                                    )}
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-3 w-full">
                                     <div>
-                                        <FloatingLabelPhone
-                                            key="tel"
-                                            id="tel"
-                                            label="Teléfono"
+                                        <CustomInput
+                                            type={'tel'}
+                                            id={'tel'}
+                                            label={'Teléfono'}
                                             register={register('tel')}
-                                            onPrefixChange={(prefix) => setValue('telPrefix', prefix)}
+                                            innerRef={register('tel').ref}
                                             hasError={!!telError}
+                                            errorMessage={telError?.message}
                                         />
-                                        {telError && (
-                                            <FieldLabel htmlFor="tel" className="text-red-500 text-xs mt-1">
-                                                {telError.message}
-                                            </FieldLabel>
-                                        )}
                                     </div>
-                                    <FloatingLabelInput
-                                        key="text"
+                                    <CustomInput
+                                        type={'text'}
                                         id="text"
                                         label="Verificar con"
                                         value={'SMS'}
