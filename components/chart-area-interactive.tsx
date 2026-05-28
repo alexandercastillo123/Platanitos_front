@@ -38,7 +38,7 @@ import {
 
 import {
   TrendingUp,
-  DollarSign,
+  ShoppingBag,
 } from "lucide-react"
 
 const salesData = [
@@ -115,36 +115,43 @@ export function ChartAreaInteractive() {
   )
 
   return (
-    <Card className="overflow-hidden border-0 bg-gradient-to-br from-background to-muted/30 shadow-xl">
-      <CardHeader className="flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between">
+    <Card className="overflow-hidden rounded-[32px] border border-yellow-100 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+
+      <CardHeader className="flex flex-col gap-5 border-b border-slate-100 bg-gradient-to-r from-yellow-50 to-white pb-6 sm:flex-row sm:items-center sm:justify-between">
+        
         <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
-              <DollarSign className="size-6 text-primary" />
+          <div className="flex items-center gap-4">
+
+            <div className="flex size-14 items-center justify-center rounded-3xl bg-yellow-400 shadow-lg shadow-yellow-400/30">
+              <ShoppingBag className="size-7 text-black" />
             </div>
 
             <div>
-              <CardTitle className="text-2xl font-bold">
+              <CardTitle className="text-3xl font-black tracking-tight text-slate-800">
                 Reporte de Ventas
               </CardTitle>
 
-              <CardDescription className="text-sm">
-                Seguimiento de ingresos y ventas realizadas
+              <CardDescription className="mt-1 text-sm text-slate-500">
+                Seguimiento de ingresos y rendimiento comercial
               </CardDescription>
             </div>
+
           </div>
         </div>
 
         <CardAction className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="rounded-2xl border bg-background px-5 py-3 shadow-sm">
-            <div className="mb-1 flex items-center gap-2 text-sm font-medium text-emerald-600">
+
+          <div className="rounded-3xl border border-yellow-200 bg-yellow-50 px-6 py-4 shadow-sm">
+            
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-emerald-600">
               <TrendingUp className="size-4" />
               +18.4% este mes
             </div>
 
-            <div className="text-2xl font-bold tracking-tight">
+            <div className="text-3xl font-black tracking-tight text-slate-800">
               S/ {totalVentas.toLocaleString()}
             </div>
+
           </div>
 
           <ToggleGroup
@@ -153,24 +160,32 @@ export function ChartAreaInteractive() {
             onValueChange={(value) => {
               if (value) setTimeRange(value)
             }}
-            variant="outline"
-            className="hidden rounded-xl border bg-background p-1 md:flex"
+            className="hidden rounded-2xl border border-slate-200 bg-white p-1 shadow-sm md:flex"
           >
-            <ToggleGroupItem value="30d" className="rounded-lg px-5">
+            <ToggleGroupItem
+              value="30d"
+              className="rounded-xl px-5 data-[state=on]:bg-yellow-400 data-[state=on]:text-black"
+            >
               30 días
             </ToggleGroupItem>
 
-            <ToggleGroupItem value="14d" className="rounded-lg px-5">
+            <ToggleGroupItem
+              value="14d"
+              className="rounded-xl px-5 data-[state=on]:bg-yellow-400 data-[state=on]:text-black"
+            >
               14 días
             </ToggleGroupItem>
 
-            <ToggleGroupItem value="7d" className="rounded-lg px-5">
+            <ToggleGroupItem
+              value="7d"
+              className="rounded-xl px-5 data-[state=on]:bg-yellow-400 data-[state=on]:text-black"
+            >
               7 días
             </ToggleGroupItem>
           </ToggleGroup>
 
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-36 rounded-xl md:hidden">
+            <SelectTrigger className="w-36 rounded-2xl border-slate-200 md:hidden">
               <SelectValue />
             </SelectTrigger>
 
@@ -180,15 +195,18 @@ export function ChartAreaInteractive() {
               <SelectItem value="7d">7 días</SelectItem>
             </SelectContent>
           </Select>
+
         </CardAction>
       </CardHeader>
 
       <CardContent className="p-6">
-        <div className="h-[380px] w-full">
+
+        <div className="h-[400px] w-full">
 
           {mounted && (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={filteredData}>
+
                 <defs>
                   <linearGradient
                     id="ventasGradient"
@@ -199,12 +217,13 @@ export function ChartAreaInteractive() {
                   >
                     <stop
                       offset="5%"
-                      stopColor="hsl(var(--primary))"
-                      stopOpacity={0.45}
+                      stopColor="#facc15"
+                      stopOpacity={0.5}
                     />
+
                     <stop
                       offset="95%"
-                      stopColor="hsl(var(--primary))"
+                      stopColor="#facc15"
                       stopOpacity={0}
                     />
                   </linearGradient>
@@ -212,16 +231,21 @@ export function ChartAreaInteractive() {
 
                 <CartesianGrid
                   vertical={false}
-                  strokeDasharray="4 4"
-                  opacity={0.15}
+                  strokeDasharray="5 5"
+                  opacity={0.1}
                 />
 
                 <XAxis
                   dataKey="date"
                   tickLine={false}
                   axisLine={false}
-                  tickMargin={10}
+                  tickMargin={12}
                   minTickGap={25}
+                  tick={{
+                    fill: "#64748b",
+                    fontSize: 12,
+                    fontWeight: 500,
+                  }}
                   tickFormatter={(value) => {
                     return new Date(value).toLocaleDateString("es-PE", {
                       day: "numeric",
@@ -233,15 +257,20 @@ export function ChartAreaInteractive() {
                 <YAxis
                   tickLine={false}
                   axisLine={false}
+                  tick={{
+                    fill: "#64748b",
+                    fontSize: 12,
+                  }}
                   tickFormatter={(value) => `S/${value / 1000}k`}
                 />
 
                 <Tooltip
                   contentStyle={{
-                    borderRadius: "18px",
-                    border: "1px solid hsl(var(--border))",
-                    background: "hsl(var(--background))",
-                    boxShadow: "0 10px 40px rgba(0,0,0,0.12)",
+                    borderRadius: "22px",
+                    border: "1px solid #fde68a",
+                    background: "#ffffff",
+                    boxShadow: "0 20px 45px rgba(0,0,0,0.12)",
+                    padding: "12px",
                   }}
                   formatter={(value) => [
                     `S/ ${Number(value).toLocaleString()}`,
@@ -259,14 +288,17 @@ export function ChartAreaInteractive() {
                 <Area
                   type="monotone"
                   dataKey="ventas"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={4}
+                  stroke="#facc15"
+                  strokeWidth={5}
                   fill="url(#ventasGradient)"
                   activeDot={{
-                    r: 7,
-                    strokeWidth: 2,
+                    r: 8,
+                    strokeWidth: 3,
+                    fill: "#facc15",
+                    stroke: "#fff",
                   }}
                 />
+
               </AreaChart>
             </ResponsiveContainer>
           )}
