@@ -10,9 +10,11 @@ import { useState, useEffect } from 'react';
 import { useLogin } from "../_hooks/useLogin"
 import Link from 'next/link';
 import CustomInput from '../_components/custom-input'
+import { useRouter } from 'next/navigation';
 
 
 export default function Page() {
+    const router = useRouter();
     const { userFound, reset: resetLoginState, checkUserExists } = useLogin()
     const [tab, setTab] = useState<'email' | 'tel'>('email')
     
@@ -64,6 +66,11 @@ export default function Page() {
         }
     }
 
+    const handleLogin = (data: LoginRequest) => {
+        console.log(data)
+        router.push('/home')
+    }
+
     return (
         <Card className='w-full max-w-lg mx-auto gap-2 md:py-7.5 md:px-17.5 p-4 ring-0'>
             <CardHeader className='p-0'>
@@ -78,7 +85,7 @@ export default function Page() {
                 </Tabs>
             </CardHeader>
             <CardContent className='overflow-hidden p-0'>
-                <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
+                <form action="POST" onSubmit={handleSubmit(handleLogin)}>
                     <input type='hidden' {...register('type')} />
                     <FieldGroup className='gap-3'>
                         {tab === 'email' ? (

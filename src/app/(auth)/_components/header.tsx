@@ -8,7 +8,7 @@ export default function Header() {
         <header className='h-15 w-full bg-[#eee] top-0 z-50 flex justify-center items-center gap-2 sticky'>
             <div>
                 <Link
-                        href={'/catalogo'}
+                        href={'/home'}
                 >
                     <Image
                         src={platanitos}
