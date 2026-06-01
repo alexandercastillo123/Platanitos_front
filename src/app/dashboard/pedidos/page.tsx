@@ -18,11 +18,13 @@ import {
   Table, TableBody, TableCell, TableHead,
   TableHeader, TableRow,
 } from "@/components/ui/table"
+
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type EstadoPedido = "pendiente" | "pagado" | "enviado" | "entregado" | "cancelado"
 
@@ -112,7 +114,7 @@ function EstadoBadge({ estado }: { estado: EstadoPedido }) {
   const cfg = ESTADO_CONFIG[estado]
   const Icon = cfg.icon
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider ${cfg.clase}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${cfg.clase}`}>
       <Icon className="size-3" />
       {cfg.label}
     </span>
@@ -319,45 +321,51 @@ export default function PedidosPage() {
   }
 
   return (
-    <div className="space-y-6 bg-white dark:bg-zinc-950 min-h-screen">
+    <div className="space-y-6 min-h-screen">
 
-      <div className="flex items-center justify-between border-b-4 border-[#FAFF00] pb-5">
+      <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <div className="h-8 w-1.5 bg-[#FAFF00]" />
-            <h1 className="text-3xl font-black uppercase tracking-tight">Pedidos</h1>
+            <div className="h-8 w-1.5 bg-gradient-to-b from-emerald-500 to-green-600 rounded-full" />
+            <h1 className="text-2xl font-bold text-gray-800">
+              Pedidos
+            </h1>
           </div>
-          <p className="text-sm text-zinc-500 font-medium pl-4">Gestiona y actualiza el estado de los pedidos</p>
+          <p className="text-sm text-gray-500 font-medium pl-4">Gestiona y actualiza el estado de los pedidos</p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: "Total pedidos", value: stats.total,                        accent: "border-zinc-900 dark:border-white" },
+          { label: "Total pedidos", value: stats.total,                        accent: "border-gray-800" },
           { label: "Pendientes",    value: stats.pendiente,                    accent: "border-amber-400" },
           { label: "En camino",     value: stats.enviado,                      accent: "border-violet-500" },
-          { label: "Ingresos",      value: `S/ ${stats.ingresos.toFixed(2)}`,  accent: "border-[#FAFF00]" },
+          { label: "Ingresos",      value: `S/ ${stats.ingresos.toFixed(2)}`,  accent: "border-emerald-500" },
         ].map(s => (
-          <div key={s.label} className={`border-2 ${s.accent} bg-white dark:bg-zinc-900 p-4`}>
-            <p className="text-xs font-black uppercase tracking-widest text-zinc-500 mb-2">{s.label}</p>
-            <p className="text-2xl font-black tracking-tight">{s.value}</p>
-          </div>
+          <Card key={s.label} className={`border-l-4 ${s.accent.includes('border-t') ? '' : `border-l-${s.accent.replace('border-', '')}`}`}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{s.label}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-gray-800">{s.value}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <div className="border-2 border-zinc-200 dark:border-zinc-800">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b-2 border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900">
+      <Card className="shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 p-4 bg-gray-50">
           <div className="relative w-full max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
             <Input placeholder="Buscar ID, cliente o email..." value={search} onChange={e => setSearch(e.target.value)}
-              className="pl-9 rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus-visible:border-[#FAFF00] focus-visible:ring-0 text-sm font-medium bg-white dark:bg-zinc-950" />
+              className="pl-9 border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm font-medium bg-white" />
           </div>
           <Select value={filtroEstado} onValueChange={setFiltroEstado}>
-            <SelectTrigger className="w-44 rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus:ring-0 focus:border-[#FAFF00] text-xs font-bold uppercase bg-white dark:bg-zinc-950">
-              <Filter className="size-3.5 mr-1 text-zinc-400" />
+            <SelectTrigger className="w-44 border-gray-300 focus:ring-emerald-500 text-xs font-medium bg-white">
+              <Filter className="size-3.5 mr-1 text-gray-400" />
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="rounded-none">
+            <SelectContent>
               <SelectItem value="todos">Todos los estados</SelectItem>
               <SelectItem value="pendiente">Pendiente</SelectItem>
               <SelectItem value="pagado">Pagado</SelectItem>
@@ -370,9 +378,9 @@ export default function PedidosPage() {
 
         <Table>
           <TableHeader>
-            <TableRow className="bg-black hover:bg-black border-none">
+            <TableRow className="bg-gray-900 hover:bg-gray-900 border-none">
               {["Pedido", "Cliente", "Fecha", "Items", "Total", "Pago", "Estado", ""].map(h => (
-                <TableHead key={h} className="text-xs font-black uppercase tracking-widest text-[#FAFF00] py-3.5 first:pl-4">
+                <TableHead key={h} className="text-xs font-semibold uppercase tracking-wider text-emerald-400 py-3.5 first:pl-4">
                   {h}
                 </TableHead>
               ))}
@@ -382,9 +390,9 @@ export default function PedidosPage() {
             {filtrados.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="py-20 text-center">
-                  <div className="flex flex-col items-center gap-3 text-zinc-400">
+                  <div className="flex flex-col items-center gap-3 text-gray-400">
                     <ShoppingBag className="size-12 opacity-20" />
-                    <p className="text-xs font-black uppercase tracking-widest">Sin resultados</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider">Sin resultados</p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -393,42 +401,42 @@ export default function PedidosPage() {
                 const cfg = ESTADO_CONFIG[p.estado]
                 return (
                   <TableRow key={p.id}
-                    className="border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
+                    className="border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"
                     onClick={() => setViendo(p)}>
                     <TableCell className="pl-4">
-                      <span className="font-mono text-sm font-black">{p.id}</span>
+                      <span className="font-mono text-sm font-semibold">{p.id}</span>
                     </TableCell>
                     <TableCell>
-                      <p className="text-sm font-black">{p.cliente}</p>
-                      <p className="text-xs text-zinc-400 font-medium">{p.email}</p>
+                      <p className="text-sm font-semibold text-gray-800">{p.cliente}</p>
+                      <p className="text-xs text-gray-500">{p.email}</p>
                     </TableCell>
-                    <TableCell className="text-sm font-semibold text-zinc-500">
+                    <TableCell className="text-sm text-gray-600">
                       {new Date(p.fecha).toLocaleDateString("es-PE", { day: "numeric", month: "short" })}
                     </TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 text-xs font-black">
+                      <span className="inline-flex items-center bg-gray-100 px-2.5 py-0.5 text-xs font-semibold">
                         {p.items.length} {p.items.length === 1 ? "item" : "items"}
                       </span>
                     </TableCell>
-                    <TableCell><span className="text-sm font-black">S/ {p.total.toFixed(2)}</span></TableCell>
-                    <TableCell className="text-sm font-semibold text-zinc-500">{p.metodoPago}</TableCell>
+                    <TableCell><span className="text-sm font-semibold">S/ {p.total.toFixed(2)}</span></TableCell>
+                    <TableCell className="text-sm text-gray-600">{p.metodoPago}</TableCell>
                     <TableCell><EstadoBadge estado={p.estado} /></TableCell>
                     <TableCell onClick={e => e.stopPropagation()}>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="size-8 rounded-none hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                          <Button variant="ghost" size="icon" className="size-8 hover:bg-gray-100">
                             <MoreHorizontal className="size-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48 rounded-none border-2 border-zinc-200 dark:border-zinc-700 p-0 shadow-[4px_4px_0px_#FAFF00]">
-                          <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide"
+                        <DropdownMenuContent align="end" className="w-48 shadow-md">
+                          <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium"
                             onClick={() => setViendo(p)}>
                             <Eye className="size-3.5" /> Ver detalle
                           </DropdownMenuItem>
                           {cfg.siguiente && (
                             <>
-                              <DropdownMenuSeparator className="my-0 border-zinc-200 dark:border-zinc-700" />
-                              <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide"
+                              <DropdownMenuSeparator className="border-gray-200" />
+                              <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium"
                                 onClick={() => cambiarEstado(p.id, cfg.siguiente!)}>
                                 <RefreshCw className="size-3.5" /> {cfg.labelSiguiente}
                               </DropdownMenuItem>
@@ -436,8 +444,8 @@ export default function PedidosPage() {
                           )}
                           {p.estado !== "cancelado" && p.estado !== "entregado" && (
                             <>
-                              <DropdownMenuSeparator className="my-0 border-zinc-200 dark:border-zinc-700" />
-                              <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-red-600 focus:text-red-600 focus:bg-red-50"
+                              <DropdownMenuSeparator className="border-gray-200" />
+                              <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium text-red-600 focus:text-red-600 focus:bg-red-50"
                                 onClick={() => cambiarEstado(p.id, "cancelado")}>
                                 <X className="size-3.5" /> Cancelar pedido
                               </DropdownMenuItem>
@@ -453,12 +461,12 @@ export default function PedidosPage() {
           </TableBody>
         </Table>
 
-        <div className="flex items-center justify-between border-t-2 border-zinc-200 dark:border-zinc-800 px-4 py-3 bg-zinc-50 dark:bg-zinc-900">
-          <p className="text-xs font-bold uppercase tracking-widest text-zinc-500">
+        <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3 bg-gray-50">
+          <p className="text-xs font-medium text-gray-500">
             {filtrados.length} de {pedidos.length} pedidos
           </p>
         </div>
-      </div>
+      </Card>
 
       {viendo && (
         <DetallePedidoModal pedido={viendo} onClose={() => setViendo(null)} onCambiarEstado={cambiarEstado} />

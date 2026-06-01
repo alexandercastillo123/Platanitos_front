@@ -25,40 +25,40 @@ export const CATEGORIAS_MOCK: PrincipalCategory[] = [
             {
                 titulo: "Zapatos",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Sandalia', href: '' },
+                    { label: 'Zapatillas', href: '/zapatillas' },
+                    { label: 'Sandalias', href: '/sandalias' },
                     { label: 'Outdoor', href: '' },
-                    { label: 'Zapatillas de moda', href: '' }
+                    { label: 'Zapatillas de moda', href: '/zapatillas' }
                 ],
-                href: ""
+                href: "/zapatillas"
             },
             {
                 titulo: "Ropa",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Camisa', href: '' },
-                    { label: 'Polos y camisetas', href: '' },
-                    { label: 'Medias', href: '' }
+                    { label: 'Deportivo', href: '/ropa' },
+                    { label: 'Camisa', href: '/ropa' },
+                    { label: 'Polos y camisetas', href: '/ropa' },
+                    { label: 'Medias', href: '/ropa' }
                 ],
-                href: ""
+                href: "/ropa"
             },
             {
                 titulo: "Accesorios",
                 enlaces: [
-                    { label: 'Sombrero y Gorro', href: '' },
-                    { label: 'Billeteras, tarjeteros y organizadores de dinero', href: '' },
-                    { label: 'Lllavero', href: '' },
-                    { label: 'Accesorios para lentes y lentes de sol', href: '' }
+                    { label: 'Sombrero y Gorro', href: '/accesorios' },
+                    { label: 'Billeteras, tarjeteros y organizadores de dinero', href: '/accesorios' },
+                    { label: 'Llavero', href: '/accesorios' },
+                    { label: 'Accesorios para lentes y lentes de sol', href: '/accesorios' }
                 ],
-                href: ""
+                href: "/accesorios"
             },
             {
                 titulo: "Relojes",
                 enlaces: [
-                    { label: 'Sombrero y Gorro', href: '' },
-                    { label: 'Billeteras, tarjeteros y organizadores de dinero', href: '' },
-                    { label: 'Lllavero', href: '' },
-                    { label: 'Accesorios para lentes y lentes de sol', href: '' }
+                    { label: 'Reloj de pulsera', href: '' },
+                    { label: 'Reloj de bolsillo', href: '' },
+                    { label: 'Llavero', href: '' },
+                    { label: 'Accesorios para lentes', href: '' }
                 ],
                 href: ""
             },
@@ -73,50 +73,50 @@ export const CATEGORIAS_MOCK: PrincipalCategory[] = [
             {
                 titulo: "Zapatos",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Sandalia', href: '' },
+                    { label: 'Zapatillas', href: '/zapatillas' },
+                    { label: 'Sandalias', href: '/sandalias' },
                     { label: 'Outdoor', href: '' },
-                    { label: 'Zapatillas de moda', href: '' }
+                    { label: 'Zapatillas de moda', href: '/zapatillas' }
                 ],
-                href: ""
+                href: "/zapatillas"
             },
             {
                 titulo: "Ropa",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Camisa', href: '' },
-                    { label: 'Polos y camisetas', href: '' },
-                    { label: 'Medias', href: '' }
+                    { label: 'Deportivo', href: '/ropa' },
+                    { label: 'Camisa', href: '/ropa' },
+                    { label: 'Polos y camisetas', href: '/ropa' },
+                    { label: 'Medias', href: '/ropa' }
                 ],
-                href: ""
+                href: "/ropa"
             },
             {
                 titulo: "Cartera y billeteras",
                 enlaces: [
-                    { label: 'Carteras con asa', href: '' },
-                    { label: 'Bolsas de hombro', href: '' },
-                    { label: 'Bolsos cruzados', href: '' },
-                    { label: 'Mochilas de moda', href: '' }
+                    { label: 'Carteras con asa', href: '/accesorios' },
+                    { label: 'Bolsas de hombro', href: '/accesorios' },
+                    { label: 'Bolsos cruzados', href: '/accesorios' },
+                    { label: 'Mochilas de moda', href: '/accesorios' }
                 ],
-                href: ""
+                href: "/accesorios"
             },
             {
                 titulo: "Accesorios",
                 enlaces: [
-                    { label: 'Sombrero y Gorro', href: '' },
-                    { label: 'Billeteras, tarjeteros y organizadores de dinero', href: '' },
-                    { label: 'Lllavero', href: '' },
-                    { label: 'Accesorios para lentes y lentes de sol', href: '' }
+                    { label: 'Sombrero y Gorro', href: '/accesorios' },
+                    { label: 'Billeteras, tarjeteros y organizadores de dinero', href: '/accesorios' },
+                    { label: 'Llavero', href: '/accesorios' },
+                    { label: 'Accesorios para lentes y lentes de sol', href: '/accesorios' }
                 ],
-                href: ""
+                href: "/accesorios"
             },
             {
                 titulo: "Relojes",
                 enlaces: [
-                    { label: 'Sombrero y Gorro', href: '' },
-                    { label: 'Billeteras, tarjeteros y organizadores de dinero', href: '' },
-                    { label: 'Lllavero', href: '' },
-                    { label: 'Accesorios para lentes y lentes de sol', href: '' }
+                    { label: 'Reloj de pulsera', href: '' },
+                    { label: 'Reloj de bolsillo', href: '' },
+                    { label: 'Llavero', href: '' },
+                    { label: 'Accesorios para lentes', href: '' }
                 ],
                 href: ""
             },
@@ -131,41 +131,44 @@ export const CATEGORIAS_MOCK: PrincipalCategory[] = [
             {
                 titulo: "Zapatos",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Sandalia', href: '' },
+                    { label: 'Zapatillas', href: '/zapatillas' },
+                    { label: 'Sandalias', href: '/sandalias' },
                     { label: 'Outdoor', href: '' },
-                    { label: 'Zapatillas de moda', href: '' }
+                    { label: 'Zapatillas de moda', href: '/zapatillas' }
                 ],
-                href: ""
+                href: "/zapatillas"
             },
             {
                 titulo: "Ropa",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Camisa', href: '' },
-                    { label: 'Polos y camisetas', href: '' },
-                    { label: 'Medias', href: '' }
+                    { label: 'Deportivo', href: '/ropa' },
+                    { label: 'Camisa', href: '/ropa' },
+                    { label: 'Polos y camisetas', href: '/ropa' },
+                    { label: 'Medias', href: '/ropa' }
                 ],
-                href: ""
+                href: "/ropa"
             },
             {
                 titulo: "Joyeria",
                 enlaces: [
-                    { label: 'Broches y prendedores', href: '' },
-                    { label: 'Brazaletes', href: '' },
+                    { label: 'Broches y prendedores', href: '/accesorios' },
+                    { label: 'Brazaletes', href: '/accesorios' },
                 ],
-                href: ""
+                href: "/accesorios"
             },
             {
                 titulo: "Accesorios",
                 enlaces: [
-                    { label: 'Sombreros y gorros', href: '' },
-                    { label: 'Lentes de sol', href: '' },
+                    { label: 'Sombreros y gorros', href: '/accesorios' },
+                    { label: 'Lentes de sol', href: '/accesorios' },
                 ],
-                href: ""
+                href: "/accesorios"
             },
             {
                 titulo: "Relojes",
+                enlaces: [
+                    { label: 'Reloj de pulsera', href: '' },
+                ],
                 href: ""
             },
             
@@ -179,34 +182,34 @@ export const CATEGORIAS_MOCK: PrincipalCategory[] = [
             {
                 titulo: "Zapatos",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Sandalia', href: '' },
-                    { label: 'Zuecos y mulas', href: '' },
-                    { label: 'Zapatillas de moda', href: '' }
+                    { label: 'Zapatillas', href: '/zapatillas' },
+                    { label: 'Sandalias', href: '/sandalias' },
+                    { label: 'Outdoor', href: '' },
+                    { label: 'Zapatillas de moda', href: '/zapatillas' }
                 ],
-                href: ""
+                href: "/zapatillas"
             },
             {
                 titulo: "Ropa",
                 enlaces: [
-                    { label: 'Deportivo', href: '' },
-                    { label: 'Camisa', href: '' },
-                    { label: 'Polos y camisetas', href: '' },
-                    { label: 'Medias', href: '' }
+                    { label: 'Deportivo', href: '/ropa' },
+                    { label: 'Camisa', href: '/ropa' },
+                    { label: 'Polos y camisetas', href: '/ropa' },
+                    { label: 'Medias', href: '/ropa' }
                 ],
-                href: ""
+                href: "/ropa"
             },
             {
                 titulo: "Accesorios",
                 enlaces: [
-                    { label: 'Lentes de sol', href: '' },
-                    { label: 'Sombreros y gorros', href: '' }
+                    { label: 'Lentes de sol', href: '/accesorios' },
+                    { label: 'Sombreros y gorros', href: '/accesorios' }
                 ],
-                href: ""
+                href: "/accesorios"
             },
             {
                 titulo: "Ofertas Niños",
-                href: ""
+                href: "/ropa"
             },
             
         ]
@@ -266,4 +269,4 @@ export const CATEGORIAS_MOCK: PrincipalCategory[] = [
             
         ]
     }
-] 
+]

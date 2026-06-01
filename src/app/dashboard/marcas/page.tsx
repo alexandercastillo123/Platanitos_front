@@ -8,6 +8,7 @@ import {
   ExternalLink, Power, ShieldOff,
 } from "lucide-react"
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -64,10 +65,10 @@ function generarSlug(nombre: string) {
 
 function EstadoBadge({ estado }: { estado: Marca["estado"] }) {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-sm border px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider
+    <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider
       ${estado === "activa"
-        ? "bg-[#FAFF00]/15 text-[#6b6f00] border-[#FAFF00]/50 dark:bg-[#FAFF00]/10 dark:text-[#d4d900] dark:border-[#FAFF00]/30"
-        : "bg-zinc-100 text-zinc-500 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700"}`}>
+        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+        : "bg-gray-100 text-gray-500 border-gray-300"}`}>
       {estado === "activa"
         ? <><Check className="size-2.5" />Activa</>
         : <><ShieldOff className="size-2.5" />Inactiva</>}
@@ -89,8 +90,8 @@ function MarcaCard({
   const pct = Math.round((marca.ventas / maxVentas) * 100)
 
   return (
-    <div className={`relative border-2 bg-white dark:bg-zinc-900 flex flex-col overflow-hidden transition-all hover:shadow-[4px_4px_0px_#FAFF00] hover:-translate-y-0.5
-      ${marca.estado === "activa" ? "border-zinc-200 dark:border-zinc-700" : "border-zinc-200 dark:border-zinc-800 opacity-60"}`}>
+    <div className={`relative border-2 bg-white flex flex-col overflow-hidden transition-all hover:shadow-lg
+      ${marca.estado === "activa" ? "border-gray-200" : "border-gray-200 opacity-60"}`}>
 
       <div className="h-1.5 w-full" style={{ background: style.bg }} />
 
@@ -98,58 +99,58 @@ function MarcaCard({
 
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center text-xl font-black flex-shrink-0"
+            <div className="flex h-12 w-12 items-center justify-center text-xl font-bold flex-shrink-0"
               style={{ background: style.bg, color: style.text }}>
               {marca.logo}
             </div>
             <div>
-              <p className="font-black text-base leading-tight">{marca.nombre}</p>
-              <span className="font-mono text-[10px] text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5">{marca.slug}</span>
+              <p className="font-semibold text-base leading-tight">{marca.nombre}</p>
+              <span className="font-mono text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5">{marca.slug}</span>
             </div>
           </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex h-7 w-7 items-center justify-center text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+              <button className="flex h-7 w-7 items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
                 <MoreHorizontal className="size-4" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40 rounded-none border-2 border-zinc-200 dark:border-zinc-700 p-0 shadow-[4px_4px_0px_#FAFF00]">
-              <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide" onClick={onEdit}>
+            <DropdownMenuContent align="end" className="w-40 shadow-md">
+              <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium" onClick={onEdit}>
                 <Edit className="size-3.5" /> Editar
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide" onClick={onToggle}>
+              <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium" onClick={onToggle}>
                 <Power className="size-3.5" /> {marca.estado === "activa" ? "Desactivar" : "Activar"}
               </DropdownMenuItem>
               {marca.website && (
-                <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide" asChild>
+                <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium" asChild>
                   <a href={marca.website} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="size-3.5" /> Visitar web
                   </a>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuSeparator className="my-0 border-zinc-200 dark:border-zinc-700" />
-              <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-red-600 focus:text-red-600 focus:bg-red-50" onClick={onDelete}>
+              <DropdownMenuSeparator className="border-gray-200" />
+              <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium text-red-600" onClick={onDelete}>
                 <Trash2 className="size-3.5" /> Eliminar
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-2 flex-1">
+        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 flex-1">
           {marca.descripcion || "Sin descripción"}
         </p>
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ventas</span>
-            <span className="text-xs font-black">{marca.ventas}</span>
+            <span className="text-[10px] font-medium uppercase text-gray-400">Ventas</span>
+            <span className="text-xs font-semibold">{marca.ventas}</span>
           </div>
-          <Progress value={pct} className="h-1.5 rounded-none bg-zinc-100 dark:bg-zinc-800 [&>div]:bg-[#FAFF00] [&>div]:rounded-none" />
+          <Progress value={pct} className="h-1.5 bg-gray-100 [&>div]:bg-emerald-600" />
         </div>
 
-        <div className="flex items-center justify-between pt-1 border-t border-zinc-100 dark:border-zinc-800">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500">
+        <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
             <Package className="size-3.5" />
             <span>{marca.productos} productos</span>
           </div>
@@ -166,9 +167,8 @@ function MarcaModal({ marca, onClose, onSave }: {
   onSave: (m: Marca) => void
 }) {
   const isNew = !marca
-  const [form, setForm] = React.useState<Marca>(
-    marca ?? { id: Date.now(), nombre: "", slug: "", descripcion: "", website: "", estado: "activa", productos: 0, logo: "", ventas: 0 }
-  )
+  const defaultMarca: Marca = { id: 0, nombre: "", slug: "", descripcion: "", website: "", estado: "activa", productos: 0, logo: "", ventas: 0 }
+  const [form, setForm] = React.useState<Marca>(() => marca ?? defaultMarca)
 
   function handleNombre(nombre: string) {
     setForm(f => ({ ...f, nombre, slug: generarSlug(nombre), logo: nombre[0]?.toUpperCase() ?? "" }))
@@ -177,69 +177,69 @@ function MarcaModal({ marca, onClose, onSave }: {
   const style = getLogoStyle(form.logo || "?")
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg overflow-hidden rounded-none border-2 border-[#FAFF00] bg-white dark:bg-zinc-950 shadow-[6px_6px_0px_#FAFF00]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-lg border-2 border-gray-200 bg-white shadow-xl">
 
-        <div className="flex items-center justify-between bg-black px-6 py-4">
+        <div className="flex items-center justify-between bg-gray-900 px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center bg-[#FAFF00]">
-              <Tag className="size-4 text-black" />
+            <div className="flex h-8 w-8 items-center justify-center bg-emerald-600">
+              <Tag className="size-4 text-white" />
             </div>
-            <h2 className="text-base font-black uppercase tracking-widest text-white">
+            <h2 className="text-base font-bold text-white">
               {isNew ? "Nueva Marca" : `Editar: ${marca.nombre}`}
             </h2>
           </div>
-          <button onClick={onClose} className="flex h-7 w-7 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors">
+          <button onClick={onClose} className="flex h-7 w-7 items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
             <X className="size-4" />
           </button>
         </div>
 
-        <div className="p-6 space-y-5 bg-white dark:bg-zinc-950">
+        <div className="p-6 space-y-5 bg-white">
 
-          <div className="flex items-center gap-4 border-2 border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4">
-            <div className="flex h-14 w-14 items-center justify-center text-2xl font-black flex-shrink-0"
+          <div className="flex items-center gap-4 border-2 border-gray-100 bg-gray-50 p-4">
+            <div className="flex h-14 w-14 items-center justify-center text-2xl font-bold flex-shrink-0"
               style={{ background: style.bg, color: style.text }}>
               {form.logo || "?"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-black text-base truncate">{form.nombre || "Nombre de la marca"}</p>
-              <p className="text-xs text-zinc-400 font-mono">{form.slug || "slug-de-la-marca"}</p>
+              <p className="font-bold text-base truncate">{form.nombre || "Nombre de la marca"}</p>
+              <p className="text-xs text-gray-400 font-mono">{form.slug || "slug-de-la-marca"}</p>
             </div>
             <EstadoBadge estado={form.estado} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-xs font-black uppercase tracking-wider text-zinc-500">Nombre *</Label>
+              <Label className="text-xs font-medium uppercase text-gray-500">Nombre *</Label>
               <Input value={form.nombre} onChange={e => handleNombre(e.target.value)} placeholder="Ej: Nike"
-                className="rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus-visible:border-[#FAFF00] focus-visible:ring-0 font-semibold" />
+                className="border-gray-300 focus:border-emerald-500 font-medium" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs font-black uppercase tracking-wider text-zinc-500">Slug</Label>
+              <Label className="text-xs font-medium uppercase text-gray-500">Slug</Label>
               <Input value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} placeholder="nike"
-                className="rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus-visible:border-[#FAFF00] focus-visible:ring-0 font-mono text-sm" />
+                className="border-gray-300 focus:border-emerald-500 font-mono text-sm" />
             </div>
             <div className="col-span-2 space-y-1.5">
-              <Label className="text-xs font-black uppercase tracking-wider text-zinc-500">Descripción</Label>
+              <Label className="text-xs font-medium uppercase text-gray-500">Descripción</Label>
               <textarea value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))}
                 placeholder="Descripción breve de la marca..." rows={2}
-                className="w-full rounded-none border-2 border-zinc-200 dark:border-zinc-700 bg-background px-3 py-2 text-sm outline-none focus:border-[#FAFF00] resize-none transition-colors" />
+                className="w-full border-2 border-gray-300 bg-background px-3 py-2 text-sm outline-none focus:border-emerald-500 resize-none transition-colors" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs font-black uppercase tracking-wider text-zinc-500">Website</Label>
+              <Label className="text-xs font-medium uppercase text-gray-500">Website</Label>
               <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-zinc-400" />
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-gray-400" />
                 <Input value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
-                  placeholder="https://..." className="pl-8 rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus-visible:border-[#FAFF00] focus-visible:ring-0" />
+                  placeholder="https://..." className="pl-8 border-gray-300 focus:border-emerald-500" />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs font-black uppercase tracking-wider text-zinc-500">Estado</Label>
+              <Label className="text-xs font-medium uppercase text-gray-500">Estado</Label>
               <Select value={form.estado} onValueChange={v => setForm(f => ({ ...f, estado: v as Marca["estado"] }))}>
-                <SelectTrigger className="rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus:ring-0 focus:border-[#FAFF00]">
+                <SelectTrigger className="border-gray-300 focus:ring-emerald-500">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="rounded-none">
+                <SelectContent>
                   <SelectItem value="activa">Activa</SelectItem>
                   <SelectItem value="inactiva">Inactiva</SelectItem>
                 </SelectContent>
@@ -248,13 +248,13 @@ function MarcaModal({ marca, onClose, onSave }: {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t-2 border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t-2 border-gray-200 bg-gray-50 px-6 py-4">
           <button onClick={onClose}
-            className="px-5 py-2.5 text-xs font-black uppercase tracking-widest border-2 border-zinc-300 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+            className="px-5 py-2.5 text-xs font-medium uppercase border border-gray-300 hover:bg-gray-100 transition-colors">
             Cancelar
           </button>
           <button onClick={() => onSave(form)} disabled={!form.nombre.trim()}
-            className="flex items-center gap-2 bg-[#FAFF00] px-5 py-2.5 text-xs font-black uppercase tracking-widest text-black hover:bg-yellow-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            className="flex items-center gap-2 bg-emerald-600 px-5 py-2.5 text-xs font-medium uppercase text-white hover:bg-emerald-700 transition-colors disabled:opacity-40">
             {isNew ? <><Plus className="size-3.5" /> Crear Marca</> : "Guardar Cambios"}
           </button>
         </div>
@@ -310,117 +310,126 @@ export default function MarcasPage() {
   const totalVentas    = marcas.reduce((a, m) => a + m.ventas, 0)
 
   return (
-    <div className="space-y-6 bg-white dark:bg-zinc-950 min-h-screen">
+    <div className="space-y-6 min-h-screen">
 
-      <div className="flex items-center justify-between border-b-4 border-[#FAFF00] pb-5">
+      <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <div className="h-8 w-1.5 bg-[#FAFF00]" />
-            <h1 className="text-3xl font-black uppercase tracking-tight">Marcas</h1>
+            <div className="h-8 w-1.5 bg-gradient-to-b from-emerald-500 to-green-600 rounded-full" />
+            <h1 className="text-2xl font-bold text-gray-800">
+              Marcas
+            </h1>
           </div>
-          <p className="text-sm text-zinc-500 font-medium pl-4">
+          <p className="text-sm text-gray-500 font-medium pl-4">
             Gestiona las marcas del catálogo de productos
           </p>
         </div>
         <button
           onClick={() => { setEditando(null); setModalOpen(true) }}
-          className="flex items-center gap-2 bg-[#FAFF00] px-5 py-3 text-sm font-black uppercase tracking-widest text-black hover:bg-yellow-300 active:scale-95 transition-all">
+          className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 px-5 py-3 text-sm font-medium text-white transition-colors">
           <Plus className="size-4" /> Nueva Marca
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: "Total marcas",    value: marcas.length,   accent: "border-zinc-900 dark:border-white",          Icon: Building2,  color: "" },
-          { label: "Activas",         value: totalActivas,    accent: "border-[#FAFF00]",                           Icon: Check,      color: "text-[#6b6f00] dark:text-[#d4d900]" },
-          { label: "Prod. cubiertos", value: totalProductos,  accent: "border-blue-500",                            Icon: Package,    color: "text-blue-600" },
-          { label: "Ventas totales",  value: totalVentas,     accent: "border-emerald-500",                         Icon: TrendingUp, color: "text-emerald-600" },
+          { label: "Total marcas",    value: marcas.length,   Icon: Building2,  color: "text-gray-600" },
+          { label: "Activas",         value: totalActivas,    Icon: Check,      color: "text-emerald-600" },
+          { label: "Prod. cubiertos", value: totalProductos,  Icon: Package,    color: "text-blue-600" },
+          { label: "Ventas totales",  value: totalVentas,     Icon: TrendingUp, color: "text-emerald-600" },
         ].map(s => (
-          <div key={s.label} className={`border-2 ${s.accent} bg-white dark:bg-zinc-900 p-4 flex items-center gap-4`}>
-            <div className="flex h-10 w-10 items-center justify-center bg-zinc-100 dark:bg-zinc-800 flex-shrink-0">
-              <s.Icon className={`size-5 ${s.color}`} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">{s.label}</p>
-              <p className="text-2xl font-black tracking-tight">{s.value}</p>
-            </div>
-          </div>
+          <Card key={s.label} className="border-l-4 border-l-gray-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase">
+                <s.Icon className={`size-4 ${s.color}`} />
+                {s.label}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-gray-800">{s.value}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-2 border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900">
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
-          <Input placeholder="Buscar marca o slug..." value={search} onChange={e => setSearch(e.target.value)}
-            className="pl-9 rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus-visible:border-[#FAFF00] focus-visible:ring-0 text-sm font-medium bg-white dark:bg-zinc-950" />
-        </div>
+      <Card className="shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 p-4 bg-gray-50">
+          <div className="relative w-full max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
+            <Input placeholder="Buscar marca o slug..." value={search} onChange={e => setSearch(e.target.value)}
+              className="pl-9 border-gray-300 focus:border-emerald-500 text-sm" />
+          </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
-          <Select value={filtroEstado} onValueChange={setFiltroEstado}>
-            <SelectTrigger className="w-36 rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus:ring-0 focus:border-[#FAFF00] text-xs font-bold uppercase bg-white dark:bg-zinc-950">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-none">
-              <SelectItem value="todos">Todo estado</SelectItem>
-              <SelectItem value="activa">Activa</SelectItem>
-              <SelectItem value="inactiva">Inactiva</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Select value={filtroEstado} onValueChange={setFiltroEstado}>
+              <SelectTrigger className="w-36 border-gray-300 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todo estado</SelectItem>
+                <SelectItem value="activa">Activa</SelectItem>
+                <SelectItem value="inactiva">Inactiva</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <Select value={orden} onValueChange={setOrden}>
-            <SelectTrigger className="w-40 rounded-none border-2 border-zinc-200 dark:border-zinc-700 focus:ring-0 focus:border-[#FAFF00] text-xs font-bold uppercase bg-white dark:bg-zinc-950">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-none">
-              <SelectItem value="nombre">A → Z</SelectItem>
-              <SelectItem value="productos">Más productos</SelectItem>
-              <SelectItem value="ventas">Más ventas</SelectItem>
-            </SelectContent>
-          </Select>
+            <Select value={orden} onValueChange={setOrden}>
+              <SelectTrigger className="w-40 border-gray-300 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="nombre">A → Z</SelectItem>
+                <SelectItem value="productos">Más productos</SelectItem>
+                <SelectItem value="ventas">Más ventas</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <div className="flex border-2 border-zinc-200 dark:border-zinc-700">
-            <button onClick={() => setVista("cards")}
-              className={`flex h-9 w-9 items-center justify-center transition-colors
-                ${vista === "cards" ? "bg-[#FAFF00] text-black" : "bg-white dark:bg-zinc-950 text-zinc-400 hover:text-zinc-700"}`}>
-              <LayoutGrid className="size-4" />
-            </button>
-            <button onClick={() => setVista("tabla")}
-              className={`flex h-9 w-9 items-center justify-center transition-colors
-                ${vista === "tabla" ? "bg-[#FAFF00] text-black" : "bg-white dark:bg-zinc-950 text-zinc-400 hover:text-zinc-700"}`}>
-              <List className="size-4" />
-            </button>
+            <div className="flex border border-gray-300">
+              <button onClick={() => setVista("cards")}
+                className={`flex h-9 w-9 items-center justify-center transition-colors
+                  ${vista === "cards" ? "bg-emerald-100 text-emerald-700" : "bg-white text-gray-400 hover:text-gray-700"}`}>
+                <LayoutGrid className="size-4" />
+              </button>
+              <button onClick={() => setVista("tabla")}
+                className={`flex h-9 w-9 items-center justify-center transition-colors
+                  ${vista === "tabla" ? "bg-emerald-100 text-emerald-700" : "bg-white text-gray-400 hover:text-gray-700"}`}>
+                <List className="size-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {filtradas.length === 0 ? (
-        <div className="flex flex-col items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 py-20 text-zinc-400">
-          <Building2 className="size-12 opacity-20 mb-3" />
-          <p className="text-xs font-black uppercase tracking-widest">Sin resultados</p>
-        </div>
-      ) : vista === "cards" ? (
+        {filtradas.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400 border-t">
+            <Building2 className="size-12 opacity-20 mb-3" />
+            <p className="text-xs font-medium uppercase">Sin resultados</p>
+          </div>
+        ) : vista === "cards" ? (
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtradas.map(m => (
-            <MarcaCard
-              key={m.id}
-              marca={m}
-              maxVentas={maxVentas}
-              onEdit={() => { setEditando(m); setModalOpen(true) }}
-              onDelete={() => handleDelete(m.id)}
-              onToggle={() => toggleEstado(m.id)}
-            />
-          ))}
-        </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtradas.map(m => (
+                <MarcaCard
+                  key={m.id}
+                  marca={m}
+                  maxVentas={maxVentas}
+                  onEdit={() => { setEditando(m); setModalOpen(true) }}
+                  onDelete={() => handleDelete(m.id)}
+                  onToggle={() => toggleEstado(m.id)}
+                />
+              ))}
+            </div>
+            <p className="text-xs font-medium text-gray-500 text-center mt-4">
+              {filtradas.length} de {marcas.length} marcas
+            </p>
+          </div>
 
-      ) : (
+        ) : (
 
-        <div className="border-2 border-zinc-200 dark:border-zinc-800">
           <Table>
             <TableHeader>
-              <TableRow className="bg-black hover:bg-black border-none">
+              <TableRow className="bg-gray-900 hover:bg-gray-900 border-none">
                 {["Marca", "Slug", "Descripción", "Website", "Productos", "Ventas", "Estado", ""].map(h => (
-                  <TableHead key={h} className="text-xs font-black uppercase tracking-widest text-[#FAFF00] py-3.5 first:pl-4">
+                  <TableHead key={h} className="text-xs font-semibold uppercase tracking-wider text-emerald-400 py-3.5 first:pl-4">
                     {h}
                   </TableHead>
                 ))}
@@ -430,56 +439,56 @@ export default function MarcasPage() {
               {filtradas.map(m => {
                 const style = getLogoStyle(m.logo)
                 return (
-                  <TableRow key={m.id} className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+                  <TableRow key={m.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <TableCell className="pl-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center text-sm font-black flex-shrink-0"
+                        <div className="flex h-9 w-9 items-center justify-center text-sm font-bold flex-shrink-0"
                           style={{ background: style.bg, color: style.text }}>
                           {m.logo}
                         </div>
-                        <span className="font-black text-sm">{m.nombre}</span>
+                        <span className="font-semibold text-sm">{m.nombre}</span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="font-mono text-xs bg-zinc-100 dark:bg-zinc-800 px-2 py-1">{m.slug}</span>
+                      <span className="font-mono text-xs bg-gray-100 px-2 py-1">{m.slug}</span>
                     </TableCell>
-                    <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 max-w-[180px] truncate">{m.descripcion || "—"}</TableCell>
+                    <TableCell className="text-xs text-gray-500 max-w-[180px] truncate">{m.descripcion || "—"}</TableCell>
                     <TableCell>
                       {m.website
-                        ? <a href={m.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-bold text-blue-600 hover:underline" onClick={e => e.stopPropagation()}>
+                        ? <a href={m.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:underline">
                             <Globe className="size-3" /> Visitar
                           </a>
-                        : <span className="text-xs text-zinc-400">—</span>}
+                        : <span className="text-xs text-gray-400">—</span>}
                     </TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 text-xs font-black">{m.productos}</span>
+                      <span className="inline-flex items-center bg-gray-100 px-2.5 py-0.5 text-xs font-medium">{m.productos}</span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2 min-w-[80px]">
                         <Progress value={Math.round((m.ventas / maxVentas) * 100)}
-                          className="h-1.5 w-14 rounded-none bg-zinc-100 dark:bg-zinc-800 [&>div]:bg-[#FAFF00] [&>div]:rounded-none" />
-                        <span className="text-xs font-black">{m.ventas}</span>
+                          className="h-1.5 w-14 bg-gray-100 [&>div]:bg-emerald-600" />
+                        <span className="text-xs font-semibold">{m.ventas}</span>
                       </div>
                     </TableCell>
                     <TableCell><EstadoBadge estado={m.estado} /></TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="flex h-8 w-8 items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-none transition-colors">
+                          <button className="flex h-8 w-8 items-center justify-center hover:bg-gray-100 rounded transition-colors">
                             <MoreHorizontal className="size-4" />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-44 rounded-none border-2 border-zinc-200 dark:border-zinc-700 p-0 shadow-[4px_4px_0px_#FAFF00]">
-                          <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide"
+                        <DropdownMenuContent align="end" className="w-44 shadow-md">
+                          <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium"
                             onClick={() => { setEditando(m); setModalOpen(true) }}>
                             <Edit className="size-3.5" /> Editar
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide"
+                          <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium"
                             onClick={() => toggleEstado(m.id)}>
                             <Power className="size-3.5" /> {m.estado === "activa" ? "Desactivar" : "Activar"}
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator className="my-0 border-zinc-200 dark:border-zinc-700" />
-                          <DropdownMenuItem className="gap-2 rounded-none px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-red-600 focus:text-red-600 focus:bg-red-50"
+                          <DropdownMenuSeparator className="border-gray-200" />
+                          <DropdownMenuItem className="gap-2 px-3 py-2.5 text-xs font-medium text-red-600"
                             onClick={() => handleDelete(m.id)}>
                             <Trash2 className="size-3.5" /> Eliminar
                           </DropdownMenuItem>
@@ -491,20 +500,8 @@ export default function MarcasPage() {
               })}
             </TableBody>
           </Table>
-
-          <div className="flex items-center justify-between border-t-2 border-zinc-200 dark:border-zinc-800 px-4 py-3 bg-zinc-50 dark:bg-zinc-900">
-            <p className="text-xs font-bold uppercase tracking-widest text-zinc-500">
-              {filtradas.length} de {marcas.length} marcas
-            </p>
-          </div>
-        </div>
-      )}
-
-      {vista === "cards" && filtradas.length > 0 && (
-        <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 text-center">
-          {filtradas.length} de {marcas.length} marcas
-        </p>
-      )}
+        )}
+      </Card>
 
       {modalOpen && (
         <MarcaModal

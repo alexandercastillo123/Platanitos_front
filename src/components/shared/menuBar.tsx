@@ -1,8 +1,6 @@
-'use client'
-
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { CATEGORIAS_MOCK, PrincipalCategory } from "@/mocks/menuCategoryMock"
+import { PrincipalCategory } from "@/mocks/menuCategoryMock"
 import { ChevronRight } from "lucide-react"
 
 interface MegaMenuProps {
@@ -11,11 +9,11 @@ interface MegaMenuProps {
 }
 
 export default function MenuBar({ categoria, onClose }: MegaMenuProps) {
-
     const [sectionActivaIndex, setSectionActivaIndex] = useState(0);
+
     useEffect(() => {
         setSectionActivaIndex(0);
-    }), [categoria]
+    }, [categoria])
 
     const sectionActual = categoria.secciones[sectionActivaIndex];
     return (

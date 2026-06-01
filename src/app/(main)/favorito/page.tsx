@@ -1,5 +1,7 @@
+'use client'
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
+import Link from 'next/link';
 
 export default function Page() {
     return (
@@ -42,8 +44,9 @@ export default function Page() {
                 <Button
                     variant="outline"
                     className="w-full uppercase cursor-pointer tracking-wider border-emerald-600 text-emerald-700 hover:bg-green-800 hover:text-white transition-colors py-5 font-semibold text-xs"
+                    asChild
                 >
-                    Agregar al carrito
+                    <Link href='/carrito'>Agregar al carrito</Link>
                 </Button>
 
             </article>

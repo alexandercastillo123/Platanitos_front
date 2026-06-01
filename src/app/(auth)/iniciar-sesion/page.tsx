@@ -12,8 +12,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useEffect } from 'react';
 import { useLogin } from "../_hooks/useLogin"
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+    const router = useRouter();
     const { userFound, reset: resetLoginState, checkUserExists } = useLogin()
     const [tab, setTab] = useState<'email' | 'tel'>('email')
     
@@ -63,6 +65,10 @@ export default function Page() {
         }
     }
 
+    const handleLogin = (data: LoginRequest) => {
+        router.push('/home')
+    }
+
     return (
         <main className='flex min-h-auto w-full p-3 md:p-10 justify-center'>
             <Card className='w-full max-w-lg p-2 mx-auto gap-2 md:py-7.5 md:px-19.5 ring-0'>
@@ -78,7 +84,7 @@ export default function Page() {
                     </Tabs>
                 </CardHeader>
                 <CardContent className='p-1 overflow-hidden'>
-                    <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
+                    <form action="POST" onSubmit={handleSubmit(handleLogin)}>
                         <input type='hidden' {...register('type')} />
                         <input type='hidden' {...register('telPrefix')} />
                         <FieldGroup className='gap-3'>
