@@ -29,7 +29,7 @@ export default function CustomInput({
         if(type === 'tel'){
             const teclasPermitidas = ['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight']
             if(teclasPermitidas.includes(e.key)) return
-            if(!/^[0-9]*$/.test(e.key)) e.preventDefault()
+            if(!/^[0-9]*$/.test(e.key)) return e.preventDefault()
         }
     }
 
@@ -73,7 +73,7 @@ export default function CustomInput({
                     ref={innerRef}
                 />
                 <FieldLabel
-                    className={`absolute transition-all top-3.5 ${type === 'tel' ? "left-24.5" : "left-2.5"} -translate-y-1/2 text-gray-600 text-xs
+                    className={`absolute transition-all top-3.5 ${type === 'tel' ? "left-25" : "left-2.75"} -translate-y-1/2 text-gray-600 text-xs
                             peer-focus:top-3.5
                             peer-focus:text-xs
                             peer-placeholder-shown:top-1/2

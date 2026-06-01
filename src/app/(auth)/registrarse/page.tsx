@@ -51,100 +51,100 @@ export default function Page() {
     }, [tab, setFocus])
 
     return (
-        <main className='flex min-h-auto w-full p-3 md:p-10 justify-center'>
-            <Card className='w-full max-w-lg p-2 mx-auto gap-2 md:py-7.5 md:px-19.5 ring-0'>
-                <CardHeader className='p-1'>
-                    <CardTitle className='text-center mb-4 text-xl'>
-                        Crea tu cuenta
-                    </CardTitle>
-                    <Tabs className='w-full' value={tab} onValueChange={handleTab}>
-                        <TabsList className='w-full h-14! p-2'>
-                            <TabsTrigger value='email' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Correo electrónico</TabsTrigger>
-                            <TabsTrigger value='tel' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Teléfono</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </CardHeader>
-                <CardContent className='p-1 overflow-hidden'>
-                    <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
-                        <input type='hidden' {...register('type')} />
-                        <FieldGroup className='gap-3'>
-                            {tab === 'email' ? (
-                                <CustomInput
-                                    type={'email'}
-                                    id={'email'}
-                                    label={'Correo electrónico'}
-                                    register={register('email')}
-                                    innerRef={register('email').ref}
-                                    hasError={!!emailError}
-                                    errorMessage={emailError?.message}
-                                />
-                            ) : (
-                                <CustomInput
-                                    type={'tel'}
-                                    id={'tel'}
-                                    label={'Teléfono'}
-                                    register={register('tel')}
-                                    innerRef={register('tel').ref}
-                                    hasError={!!telError}
-                                    errorMessage={telError?.message}
-                                />
-                            )}
+        <Card className='w-full max-w-lg p-4 mx-auto gap-2 md:py-7.5 md:px-17.5 ring-0'>
+            <CardHeader className='p-0'>
+                <CardTitle className='text-center mb-4 text-xl font-medium text-[#212529]'>
+                    Crea tu cuenta
+                </CardTitle>
+                <Tabs className='w-full mb-4' value={tab} onValueChange={handleTab}>
+                    <TabsList className='w-full h-14! p-2'>
+                        <TabsTrigger value='email' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Correo electrónico</TabsTrigger>
+                        <TabsTrigger value='tel' className='data-[state=active]:bg-[#0c550f] data-[state=active]:text-white text-[#0c550f] hover:text-[#0c550f] cursor-pointer'>Teléfono</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+            </CardHeader>
+            <CardContent className='p-0 overflow-hidden'>
+                <form action="POST" onSubmit={handleSubmit((data) => console.log(data))}>
+                    <input type='hidden' {...register('type')} />
+                    <FieldGroup className='gap-3'>
+                        {tab === 'email' ? (
                             <CustomInput
-                                type={'text'}
-                                id={'dni'}
-                                label={'DNI'}
-                                register={register('dni')}
-                                innerRef={register('dni').ref}
-                                maxLength={8}
-                                hasError={!!errors.dni}
-                                errorMessage={errors.dni?.message}
+                                key={'input-email'}
+                                type={'email'}
+                                id={'email'}
+                                label={'Correo electrónico'}
+                                register={register('email')}
+                                innerRef={register('email').ref}
+                                hasError={!!emailError}
+                                errorMessage={emailError?.message}
                             />
+                        ) : (
                             <CustomInput
-                                type={'text'}
-                                id={'nombres'}
-                                label={'Nombres'}
-                                register={register('nombres')}
-                                innerRef={register('nombres').ref}
-                                hasError={!!errors.nombres}
-                                errorMessage={errors.nombres?.message}
+                                key={'input-tel'}
+                                type={'tel'}
+                                id={'tel'}
+                                label={'Teléfono'}
+                                register={register('tel')}
+                                innerRef={register('tel').ref}
+                                hasError={!!telError}
+                                errorMessage={telError?.message}
                             />
-                            <CustomInput
-                                type={'text'}
-                                id={'apellidos'}
-                                label={'Apellidos'}
-                                register={register('apellidos')}
-                                innerRef={register('apellidos').ref}
-                                hasError={!!errors.apellidos}
-                                errorMessage={errors.apellidos?.message}
-                            />
-                            <Field>
-                                <Button
-                                    className='bg-[#0c550f] hover:bg-[#7ec976] cursor-pointer h-11 my-1 px-3 py-2 tracking-widest'
-                                    disabled={isRegisterDisabled}
-                                >
-                                    CREA TU CUENTA
-                                </Button>
-                            </Field>
-                            <Field>
-                                <FieldLabel className='text-sm line-clamp-2 text-center text-[#222222] font-normal'>
-                                    ¿Tienes una cuenta?
-                                </FieldLabel>
-                            </Field>
-                            <Field>
-                                <Button
-                                    type='button'
-                                    className='border-[#0C550F] text-[#0C550F] bg-white cursor-pointer h-9 px-3 py-2 hover:bg-white! hover:text-[#0C550F]! font-normal tracking-widest rounded-md'
-                                    asChild
-                                >
-                                    <Link href={'/iniciar-sesion'}>
-                                        INICIAR SESION
-                                    </Link>
-                                </Button>
-                            </Field>
-                        </FieldGroup>
-                    </form>
-                </CardContent>
-            </Card>
-        </main>
+                        )}
+                        <CustomInput
+                            type={'text'}
+                            id={'dni'}
+                            label={'DNI'}
+                            register={register('dni')}
+                            innerRef={register('dni').ref}
+                            maxLength={8}
+                            hasError={!!errors.dni}
+                            errorMessage={errors.dni?.message}
+                        />
+                        <CustomInput
+                            type={'text'}
+                            id={'nombres'}
+                            label={'Nombres'}
+                            register={register('nombres')}
+                            innerRef={register('nombres').ref}
+                            hasError={!!errors.nombres}
+                            errorMessage={errors.nombres?.message}
+                        />
+                        <CustomInput
+                            type={'text'}
+                            id={'apellidos'}
+                            label={'Apellidos'}
+                            register={register('apellidos')}
+                            innerRef={register('apellidos').ref}
+                            hasError={!!errors.apellidos}
+                            errorMessage={errors.apellidos?.message}
+                        />
+                        <Field>
+                            <Button
+                                className='bg-[#0c550f] hover:bg-[#7ec976] cursor-pointer h-11 my-1 px-3 py-2 tracking-[1.25px]'
+                                disabled={isRegisterDisabled}
+                            >
+                                CREA TU CUENTA
+                            </Button>
+                        </Field>
+                        <Field>
+                            <FieldLabel className='text-sm line-clamp-2 text-center text-[#222222] font-normal'>
+                                ¿Tienes una cuenta?
+                            </FieldLabel>
+                        </Field>
+                        <Field>
+                            <Button
+                                type='button'
+                                className='border-[#0C550F] text-[#0C550F] bg-white cursor-pointer h-9 px-3 py-2 hover:bg-white! hover:text-[#0C550F]! font-normal tracking-[1.25px] rounded-md'
+                                asChild
+                            >
+                                <Link href={'/iniciar-sesion'}>
+                                    INICIAR SESION
+                                </Link>
+                            </Button>
+                        </Field>
+                    </FieldGroup>
+                </form>
+            </CardContent>
+        </Card>
     )
 }
